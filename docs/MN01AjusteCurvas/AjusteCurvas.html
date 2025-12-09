@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.24">
 
   <meta name="author" content="Prof.&nbsp;Dr.&nbsp;Raphael Teixeira">
-  <title>Métodos Numéricos UFPA – Raízes de Equações Não Lineares</title>
+  <title>Métodos Numéricos UFPA – Ajuste de Curvas</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -127,7 +127,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Raízes de Equações Não Lineares</h1>
+  <h1 class="title">Ajuste de Curvas</h1>
   <p class="subtitle">Métodos Numéricos I</p>
 
 <div class="quarto-title-authors">
@@ -139,125 +139,113 @@ Prof.&nbsp;Dr.&nbsp;Raphael Teixeira
 </div>
 
 </section>
-<section id="o-problema-da-determinação-de-raízes" class="slide level2">
-<h2>🔍 O Problema da Determinação de Raízes</h2>
-<h3 id="definição">Definição</h3>
-<p>O objetivo é encontrar os valores de <span class="math inline">\(x\)</span> que satisfazem a equação <span class="math inline">\(f(x) = 0\)</span>.</p>
-<blockquote>
-<p>Resolver <span class="math inline">\(\text{e}^x = 4 \sin(x)\)</span> equivale a encontrar os zeros de <span class="math inline">\(f(x) = \text{e}^x - 4 \sin(x)\)</span>.</p>
-</blockquote>
-<h3 id="métodos-analíticos-vs.-numéricos">Métodos Analíticos vs.&nbsp;Numéricos</h3>
+<section id="introdução-e-objetivos" class="slide level2">
+<h2>🎯 Introdução e Objetivos</h2>
+<h3 id="o-problema-do-ajuste-de-curvas">O Problema do Ajuste de Curvas</h3>
+<p>O ajuste de curvas é o processo de construir uma curva, ou função matemática, que tenha o “melhor ajuste” para uma série de pontos de dados observados, frequentemente sujeitos a erros.</p>
 <ul>
-<li><strong>Analíticos:</strong> Usam fórmulas exatas (ex: Fórmula de Bhaskara para quadráticas). Limitados a poucos tipos de funções.</li>
-<li><strong>Numéricos:</strong> Usam iterações para encontrar uma <strong>aproximação</strong> da raiz. Essenciais para funções transcendentais ou complexas.</li>
+<li class="fragment"><strong>Interpolação:</strong> A curva <strong>passa</strong> exatamente por todos os pontos (exato).</li>
+<li class="fragment"><strong>Ajuste:</strong> A curva <strong>se aproxima</strong> da tendência dos pontos (aproximado).</li>
 </ul>
-</section>
-<section id="método-da-bisseção" class="slide level2">
-<h2>🪓 Método da Bisseção</h2>
-<h3 id="princípio-fundamental-teorema-de-bolzano">Princípio Fundamental (Teorema de Bolzano)</h3>
-<p>O método da Bisseção é um método de <strong>fechamento (bracketting)</strong>.</p>
+<h3 id="objetivos">Objetivos</h3>
 <ol type="1">
-<li>Escolhemos um intervalo <span class="math inline">\([a, b]\)</span> onde a função <span class="math inline">\(f(x)\)</span> tem sinais opostos.
-<ul>
-<li>Isto é, <span class="math inline">\(f(a) \cdot f(b) &lt; 0\)</span>.</li>
-</ul></li>
-<li>A raiz está garantidamente no intervalo.</li>
-<li>A nova aproximação é o ponto médio: <span class="math inline">\(r = (a+b)/2\)</span>.</li>
-<li>O intervalo é reduzido pela metade em cada iteração.</li>
+<li>Determinar a função que melhor representa o fenômeno.</li>
+<li>Permitir a <strong>predição</strong> de valores fora da faixa de dados observados (extrapolação).</li>
 </ol>
-<h3 id="vantagens-e-desvantagens">Vantagens e Desvantagens</h3>
+</section>
+<section id="método-dos-mínimos-quadrados" class="slide level2">
+<h2>📈 Método dos Mínimos Quadrados</h2>
+<h3 id="a-base-do-ajuste">A Base do Ajuste</h3>
+<p>O método dos mínimos quadrados (MMQ) é a técnica mais comum para encontrar o ajuste. Ele minimiza o erro quadrático total.</p>
+<p><span class="math display">\[
+E = \sum_{i=1}^{n} [y_i - f(x_i)]^2
+\]</span></p>
+<p>Onde:</p>
+<ul>
+<li><span class="math inline">\(E\)</span> é o erro quadrático total.</li>
+<li><span class="math inline">\(y_i\)</span> é o valor real (observado).</li>
+<li><span class="math inline">\(f(x_i)\)</span> é o valor previsto pela função de ajuste.</li>
+</ul>
+<h3 id="minimização">Minimização</h3>
+<p>Para encontrar os parâmetros ótimos (ex: <span class="math inline">\(a_0\)</span> e <span class="math inline">\(a_1\)</span> em uma reta), calculamos as derivadas parciais do erro <span class="math inline">\(E\)</span> em relação a cada parâmetro e as igualamos a zero:</p>
+<p><span class="math display">\[
+\frac{\partial E}{\partial a_k} = 0
+\]</span></p>
+</section>
+<section id="ajuste-linear-reta" class="slide level2">
+<h2>📏 Ajuste Linear (Reta)</h2>
+<h3 id="equação-da-reta">Equação da Reta</h3>
+<p>Assumimos que o modelo de melhor ajuste é uma reta:</p>
+<p><span class="math display">\[
+y = a_0 + a_1 x
+\]</span></p>
+<h3 id="sistema-de-equações-normais">Sistema de Equações Normais</h3>
+<p>A aplicação do MMQ leva ao seguinte sistema (para encontrar <span class="math inline">\(a_0\)</span> e <span class="math inline">\(a_1\)</span>):</p>
+<p><span class="math display">\[
+\begin{cases}
+n a_0 + (\sum x_i) a_1 = \sum y_i \\
+(\sum x_i) a_0 + (\sum x_i^2) a_1 = \sum x_i y_i
+\end{cases}
+\]</span></p>
+<p>Este é um sistema linear <span class="math inline">\(2 \times 2\)</span> que pode ser resolvido por métodos como Eliminação Gaussiana ou Cramer.</p>
+</section>
+<section id="exemplo-em-código" class="slide level2">
+<h2>💻 Exemplo em Código</h2>
+<p>Vamos supor que temos os seguintes dados:</p>
 <table class="caption-top">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Vantagens</th>
-<th style="text-align: left;">Desvantagens</th>
+<th><span class="math inline">\(x\)</span></th>
+<th><span class="math inline">\(y\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><strong>Garante a convergência</strong> (sempre encontra a raiz).</td>
-<td style="text-align: left;">Convergência <strong>lenta</strong> (linear).</td>
+<td>1.0</td>
+<td>0.5</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Fácil de implementar.</td>
-<td style="text-align: left;">Requer o conhecimento prévio de um intervalo válido.</td>
+<td>2.0</td>
+<td>2.5</td>
+</tr>
+<tr class="odd">
+<td>3.0</td>
+<td>2.0</td>
+</tr>
+<tr class="even">
+<td>4.0</td>
+<td>4.0</td>
+</tr>
+<tr class="odd">
+<td>5.0</td>
+<td>3.5</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="estimativa-de-erro-na-bisseção" class="slide level2">
-<h2>🧪 Estimativa de Erro na Bisseção</h2>
-<p>O erro absoluto (<span class="math inline">\(E_a\)</span>) é dado pela metade do tamanho do novo intervalo:</p>
-<p><span class="math display">\[
-E_a = \frac{b - a}{2}
-\]</span></p>
-<p>Após <span class="math inline">\(k\)</span> iterações, o erro máximo é:</p>
-<p><span class="math display">\[
-E_k \le \frac{b_0 - a_0}{2^k}
-\]</span></p>
-<p>Para atingir uma precisão (<span class="math inline">\(\epsilon\)</span>) desejada, o número mínimo de iterações (<span class="math inline">\(k\)</span>) é:</p>
-<p><span class="math display">\[
-k \ge \log_2\left(\frac{b_0 - a_0}{\epsilon}\right)
-\]</span></p>
-</section>
-<section id="método-de-newton-raphson" class="slide level2">
-<h2>⚡️ Método de Newton-Raphson</h2>
-<h3 id="fórmula-iterativa">Fórmula Iterativa</h3>
-<p>O método de Newton é um método <strong>aberto</strong> que utiliza a reta tangente à curva no ponto atual <span class="math inline">\(x_i\)</span> para estimar o próximo ponto <span class="math inline">\(x_{i+1}\)</span>.</p>
-<p><span class="math display">\[
-x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)}
-\]</span></p>
-<ul>
-<li>Requer uma aproximação inicial <span class="math inline">\(x_0\)</span>.</li>
-</ul>
-<h3 id="convergência-rápida">Convergência Rápida</h3>
-<p>Quando a aproximação inicial é próxima da raiz, o método converge <strong>quadraticamente</strong>.</p>
-<p><span class="math display">\[
-\text{Erro}_{i+1} \propto (\text{Erro}_i)^2
-\]</span></p>
-</section>
-<section id="desafios-de-newton-raphson" class="slide level2">
-<h2>⚠️ Desafios de Newton-Raphson</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<h3 id="problemas-comuns">Problemas Comuns</h3>
-<ol type="1">
-<li><strong>Derivada Zero:</strong> Se <span class="math inline">\(f'(x_i) \approx 0\)</span>, a fórmula se torna instável (divisão por zero).</li>
-<li><strong>Divergência:</strong> Uma aproximação inicial ruim pode fazer a sequência de <span class="math inline">\(x_i\)</span> se afastar da raiz.</li>
-<li><strong>Raízes Múltiplas:</strong> A convergência se torna mais lenta (linear).</li>
-</ol>
-</div><div class="column" style="width:50%;">
-
-</div></div>
-</section>
-<section id="exemplo-em-python" class="slide level2">
-<h2>💻 Exemplo em Python</h2>
-<p>Encontrando a raiz de <span class="math inline">\(f(x) = \text{e}^{-x} - x\)</span>.</p>
+<h3 id="implementação-em-python">Implementação em Python</h3>
 <p>```python import numpy as np</p>
-<p>def f(x): # e^(-x) - x return np.exp(-x) - x</p>
-<p>def df(x): # Derivada: -e^(-x) - 1 return -np.exp(-x) - 1</p>
-<p>def newton_raphson(x0, tol=1e-6, max_iter=10): x = x0 for i in range(max_iter): delta_x = f(x) / df(x) x_novo = x - delta_x</p>
-<pre><code>    if abs(x_novo - x) &lt; tol:
-        return x_novo
-    
-    x = x_novo
-return x</code></pre>
 </section>
-<section id="aproximação-inicial" class="title-slide slide level1 center">
-<h1>Aproximação inicial</h1>
-<p>raiz = newton_raphson(x0=1.0)</p>
-<p>print(f”Raiz aproximada: {raiz:.6f}“) # Output deve ser próximo de 0.567143</p>
+<section id="dados-de-exemplo" class="title-slide slide level1 center">
+<h1>Dados de exemplo</h1>
+<p>x = np.array([1.0, 2.0, 3.0, 4.0, 5.0]) y = np.array([0.5, 2.5, 2.0, 4.0, 3.5])</p>
+</section>
+
+<section id="cálculo-dos-coeficientes-pelo-numpy-polyfit" class="title-slide slide level1 center">
+<h1>Cálculo dos coeficientes pelo numpy (polyfit)</h1>
+
+</section>
+
+<section id="o-grau-1-indica-ajuste-linear" class="title-slide slide level1 center">
+<h1>O grau 1 indica ajuste linear</h1>
+<p>coefs = np.polyfit(x, y, 1)</p>
+<p>print(f”Coeficiente a1 (inclinação): {coefs[0]:.4f}“) print(f”Coeficiente a0 (intercepto): {coefs[1]:.4f}“)</p>
 
 
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
-<p>MN02 - Raízes de Equações Não Lineares</p>
+<p>MN01 - Ajuste de Curvas</p>
 </div>
 </div></div>
 
@@ -415,7 +403,7 @@ return x</code></pre>
         previewLinks: false,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
+        transition: 'fade',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
